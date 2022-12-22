@@ -20,17 +20,9 @@ const phoneBookSlice = createSlice({
     },
 
     reducers: {
-      addContact(state, { payload: { name, number } }) {
-        if (state.items.some(el => el.name === name)) {
-          alert(`${name} is already in contacts.`);
-          return;
-        }
+      addContact(state, action) {
+        state.items.push(action.payload);
   
-        state.items.push({
-          id: nanoid(),
-          name,
-          number,
-        });
       },
   
       deleteContact(state, action) {

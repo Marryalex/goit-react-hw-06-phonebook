@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useState} from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 
-
+import { nanoid } from '@reduxjs/toolkit';
 import styles from './ContactForm.module.css'
 import { addContact } from 'redux/phoneBook';
 
@@ -11,6 +11,7 @@ const dispatch = useDispatch();
 const [name, setName] = useState('')
 const [number, setNumber] = useState('')
 
+const contacts = useSelector(state => state.contacts.items);
 
 const handleChange = (e) => {
   const { name, value } = e.currentTarget;
@@ -30,8 +31,16 @@ const handleChange = (e) => {
 
 const handleSubmit = (e) => {
   e.preventDefault();
-  dispatch(addContact({ name, number }));
-  reset();
+
+  const addNewContact = { name, number, id: nanoid() };
+            
+  if (contacts.find(
+      contact => name.toLocaleLowerCase() === contact.name.toLocaleLowerCase())) {
+      alert(`${name} is already in contacts`)
+  } else {
+      dispatch(addContact(addNewContact))  
+      reset();
+}
 };
 
 const reset = () => {
